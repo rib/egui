@@ -6,6 +6,9 @@
 
 #![warn(missing_docs)] // Let's keep `epi` well-documented.
 
+#[cfg(target_os = "android")]
+use android_activity::AndroidApp;
+
 /// This is how your app is created.
 ///
 /// You can use the [`CreationContext`] to setup egui, restore state, setup OpenGL things, etc.
@@ -288,6 +291,9 @@ pub struct NativeOptions {
     /// When `true`, [`winit::platform::run_return::EventLoopExtRunReturn::run_return`] is used.
     /// When `false`, [`winit::event_loop::EventLoop::run`] is used.
     pub run_and_return: bool,
+
+    #[cfg(target_os = "android")]
+    pub android_app: Option<AndroidApp>,
 }
 
 #[cfg(not(target_arch = "wasm32"))]
@@ -315,6 +321,9 @@ impl Default for NativeOptions {
             follow_system_theme: cfg!(target_os = "macos") || cfg!(target_os = "windows"),
             default_theme: Theme::Dark,
             run_and_return: true,
+
+            #[cfg(target_os = "android")]
+            android_app: None,
         }
     }
 }

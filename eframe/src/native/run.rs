@@ -7,6 +7,9 @@ use std::time::Instant;
 use egui_winit::winit;
 use winit::event_loop::{ControlFlow, EventLoop};
 
+#[cfg(target_os = "android")]
+use winit::platform::android::EventLoopBuilderExtAndroid;
+
 use super::epi_integration::{self, EpiIntegration};
 use crate::epi;
 
@@ -202,7 +205,7 @@ fn run_and_exit(
                 next_repaint_time = next_repaint_time.min(repaint_time);
             }
             EventResult::Exit => {
-                tracing::debug!("Quitting…");
+                tracing::debug!("Quitting�");
                 winit_app.save_and_destroy();
                 #[allow(clippy::exit)]
                 std::process::exit(0);
@@ -722,7 +725,19 @@ mod wgpu_integration {
                 run_and_return(event_loop, wgpu_eframe);
             });
         } else {
-            let event_loop = winit::event_loop::EventLoopBuilder::with_user_event().build();
+            let mut event_loop_builder = winit::event_loop::EventLoopBuilder::with_user_event();
+
+            #[cfg(target_os = "android")]
+            {
+                event_loop_builder.with_android_app(
+                    native_options
+                        .android_app
+                        .clone()
+                        .expect("No AndroidApp provided"),
+                );
+            }
+
+            let event_loop = event_loop_builder.build();
             let wgpu_eframe = WgpuWinitApp::new(&event_loop, app_name, native_options, app_creator);
             run_and_exit(event_loop, wgpu_eframe);
         }

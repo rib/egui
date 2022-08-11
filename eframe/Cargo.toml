@@ -82,13 +82,18 @@ wgpu = { version = "0.13", optional = true }
 # native:
 [target.'cfg(not(target_arch = "wasm32"))'.dependencies]
 dark-light = { version = "0.2.1", optional = true }
-egui-winit = { version = "0.18.0", path = "../egui-winit", default-features = false, features = ["clipboard", "links"] }
+egui-winit = { version = "0.18.0", path = "../egui-winit", default-features = false, features = ["links"] }
 glutin = { version = "0.29.0" }
 winit = "0.27.2"
 
 # optional native:
 puffin = { version = "0.13", optional = true }
 directories-next = { version = "2", optional = true }
+
+# -------------------------------------------
+# android
+[target.'cfg(target_os = "android")'.dependencies]
+android-activity = { git = "https://github.com/rib/android-activity", features = [ "game-activity" ] }
 
 # -------------------------------------------
 # web:

@@ -67,6 +67,29 @@ dependencies = [
 ]
 
 [[package]]
+name = "android-activity"
+version = "0.1.1"
+source = "git+https://github.com/rib/android-activity#4818de6709fb4035e213a9474c30d8fc1e8360b7"
+dependencies = [
+ "android-properties",
+ "bitflags",
+ "cc",
+ "jni-sys",
+ "libc",
+ "log",
+ "ndk 0.7.0",
+ "ndk-context",
+ "ndk-sys 0.4.0",
+ "num_enum",
+]
+
+[[package]]
+name = "android-properties"
+version = "0.2.2"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "fc7eb209b1518d6bb87b283c20095f5228ecda460da70b44f0802523dea6da04"
+
+[[package]]
 name = "android_system_properties"
 version = "0.1.2"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -1171,6 +1194,7 @@ checksum = "6907e25393cdcc1f4f3f513d9aac1e840eb1cc341a0fccb01171f7d14d10b946"
 name = "eframe"
 version = "0.18.0"
 dependencies = [
+ "android-activity",
  "bytemuck",
  "dark-light",
  "directories-next",
