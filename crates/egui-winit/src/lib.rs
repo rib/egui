@@ -85,6 +85,8 @@ pub struct State {
     pointer_touch_id: Option<u64>,
 
     /// track ime state
+    text_input_last_frame: bool,
+    text_input_this_frame: bool,
     input_method_editor_started: bool,
 }
 
@@ -113,6 +115,8 @@ impl State {
             simulate_touch_screen: false,
             pointer_touch_id: None,
 
+            text_input_this_frame: false,
+            text_input_last_frame: false,
             input_method_editor_started: false,
         }
     }
@@ -605,9 +609,23 @@ impl State {
             self.clipboard.set(copied_text);
         }
 
+        self.text_input_this_frame = text_cursor_pos.is_some();
+        if self.text_input_last_frame != self.text_input_this_frame {
+            if self.text_input_this_frame {
+                println!("egui-winit: begin ime input");
+                window.begin_ime_input();
+            } else {
+                println!("egui-winit: end ime input");
+                window.end_ime_input();
+            }
+            //window.set_ime_allowed(self.text_input_this_frame);
+            //println!("winit: set_ime_allowed = {}", self.text_input_this_frame);
+        }
         if let Some(egui::Pos2 { x, y }) = text_cursor_pos {
+            println!("winit: set_ime_position = {x},{y}");
             window.set_ime_position(winit::dpi::LogicalPosition { x, y });
         }
+        self.text_input_last_frame = self.text_input_this_frame;
     }
 
     fn set_cursor_icon(&mut self, window: &winit::window::Window, cursor_icon: egui::CursorIcon) {
